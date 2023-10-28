@@ -18,7 +18,7 @@ class SampleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: "증권",
+      title: "증권사",
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.fade, /// Transition : 화면 전환 모드
       getPages: PageRouter.route,         /// Router ( 화면 - 이름 목록 )

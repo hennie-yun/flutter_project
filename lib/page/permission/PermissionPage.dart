@@ -58,7 +58,7 @@ class PermissionPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '상상인증권의 서비스를 이용하려면 \n아래 기능의 접근 권한 동의가 필요해요.',
+                          '카카오증권의 서비스를 이용하려면 \n아래 기능의 접근 권한 동의가 필요해요.',
                           style: TextStyle(
                             fontSize: 24,
                             color: Color(0xFF424242),
@@ -144,7 +144,7 @@ class PermissionPage extends StatelessWidget {
                             Padding(
                                 padding: EdgeInsets.only(bottom: 4),
                                 child: Text(
-                                    '• 접근 권한 설정은 상상인증권 > 설정에서 권한별 변경이 가능합니다.',
+                                    '• 접근 권한 설정은 카카오증권 > 설정에서 권한별 변경이 가능합니다.',
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 5,
                                     style: TextStyle(

@@ -26,7 +26,7 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromRGBO(41, 54, 70, 100),
+
         body: SafeArea(
           child: Column(
 
@@ -39,7 +39,7 @@ class SplashPage extends StatelessWidget {
                   height: 200,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/images/img_splash.png'),
+                      image: AssetImage('assets/images/img_splash.jpg'),
                     ),
                   ),
                 ),
@@ -50,7 +50,7 @@ class SplashPage extends StatelessWidget {
                   children: [
                     Text('고객님의 안전한 금융거래를 위해 \n 프로그램 실행을 준비중입니다',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 22, color: Colors.white)),
+                        style: TextStyle(fontSize: 22, color: Colors.black)),
                     Container(
                         margin: EdgeInsets.only(top: 10, bottom: 20),
                         child: Obx(() {
@@ -63,9 +63,9 @@ class SplashPage extends StatelessWidget {
                                 .of(context)
                                 .size
                                 .width - 60,
-                            backgroundColor: Color.fromRGBO(41, 54, 70, 100),
+                            backgroundColor: Colors.white,
                             percent: percent,
-                            progressColor: Color.fromRGBO(0, 176, 173, 100),
+                            progressColor: Color(0xFFFEE500),
                             barRadius: Radius.circular(10),
                           );
                         })
