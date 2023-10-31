@@ -1,28 +1,79 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/material/app_bar.dart';
 
-class InvestmentPage extends StatefulWidget {
-  const InvestmentPage({super.key});
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:http/http.dart' as http;
 
+import '../../../base/BasePage.dart';
+import '../../../constants/SampleColor.dart';
+import '../../../constants/SampleWidget.dart';
+import 'InvestmentPageController.dart';
+
+class InvestmentPage extends BasePage<InvestmentPageController> {
 
   @override
-  _InvestmentPageState createState() => _InvestmentPageState();
+  AppBar? setAppBar() {
+    return AppBar(
+      toolbarHeight: 64,
+      backgroundColor: SampleColor.bgUiCard,
+      elevation: 0,
+      title: SizedBox(
+          height: 60,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                height: 24,
+                child: Image.asset("assets/images/icon_logo.png"),
+              ),
+            ],
+          )),
+    );
+  }
 
+  Future<List<dynamic>> fetchAlbums() async {
+    final uri = Uri.parse('https://jsonplaceholder.typicode.com/albums');
+    List albumList = [];
+
+    final response = await http.get(uri);
+
+    if (response.statusCode == 200) {
+      albumList = json.decode(response.body);
+      return albumList;
+    } else {
+      throw Exception('실패 ');
+    }
+  }
+
+  @override
+  Widget setBuild() {
+    return FutureBuilder<List<dynamic>>(
+      future: fetchAlbums(),
+      builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+        //데이터를 아직 받아 오지 못해쓸 때 실행 되는 부분
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {         // 데이터 성공
+          List? data = snapshot.data;
+          if (data == null || data.isEmpty) {
+            return const Text('데이터없음');
+          } else {
+            return ListView.builder(
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                return ListTile (
+                    title : Text(data[index]['title'])
+                );
+              },
+            );
+          }
+        }
+      },
+    );
+  }
 }
-  class _InvestmentPageState extends State<InvestmentPage> {
-
-  @override
-  Widget build(BuildContext context) {
-  return const Scaffold(
-
-  body: SafeArea(
-  child : Text(
-  '투자 페이지~ '
-  )
-
-  )
-  );
-  }
-  }
-
-

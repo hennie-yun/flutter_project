@@ -1,13 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
 
 import '../../../base/BasePage.dart';
 import '../../../constants/SampleColor.dart';
 import 'HomePageController.dart';
 
 class HomePage extends BasePage<HomePageController> {
+  HomePageController HPController = HomePageController();
+
   @override
   AppBar? setAppBar() {
     return AppBar(
@@ -93,27 +95,107 @@ class HomePage extends BasePage<HomePageController> {
                           ]))
                     ]) //Row 두개를 다시 Row 로 정렬해 줄 큰 Row 와 children
             ),
-            // SizedBox(
-            //     height: 400,
-            //     child: Column(
-            //       children: [
-            //         _tabBar(),
-            //         Expanded(
-            //           child: _tabBarView(),
-            //         ),
-            //       ],
-            //     )),
           ],
         ),
+      ),
+      SizedBox(
+        height: 400,
+        child: _tabView(),
       ),
     ]);
   }
 
+  Widget _tabView() {
+    List<Map<String, dynamic>> interestTabs = HPController.getInterestTabs();
+    return DefaultTabController(
+      length: 8,
+      child: Scaffold(
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            TabBar(
+              isScrollable: true,
+              labelColor: Colors.black,
+              unselectedLabelColor: Colors.grey,
+              labelStyle: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+              unselectedLabelStyle: const TextStyle(
+                fontSize: 20,
+              ),
 
+              /// 기본 인디캐이터의 컬러
+              indicatorColor: Colors.black,
 
+              /// indicator에서  UnderlineTabIndicator를 사용하지 않을 경우
+              /// 0으로 설정할 것
+              indicatorWeight: 3,
 
+              /// 인디캐이터의 기본 사이즈를 label에 맞출지,
+              /// 탭 좌우 사이즈에 맞출지 설정
+              indicatorSize: TabBarIndicatorSize.tab,
 
-//배너 바로 아래 주가 지수 나온 부분 -> 나중에 API 긁어오면 될듯...?
+              /// 탭바의 상하좌우에 적용하는 패딩
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 10,
+              ),
+
+              /// 라벨에 주는 패딩
+              labelPadding: const EdgeInsets.symmetric(horizontal: 10
+                // vertical: 10,
+              ),
+
+              /// 인디캐이터의 패딩
+              indicatorPadding: const EdgeInsets.all(8),
+
+              tabs: [
+                Tab(text: "기본그룹"),
+                Tab(text: "관심그룹1"),
+                Tab(text: "2차 전지"),
+                Tab(text: "ETF"),
+                Tab(text: "테마주"),
+                Tab(text: "삼성전자"),
+                Tab(text: "언제올라"),
+                Tab(text: "비트코인"),
+              ],
+            ),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  ListView(children: tabContents(interestTabs)),
+                  Center(
+                    child: Text('내용 2'),
+                  ),
+                  Center(
+                    child: Text('내용 3'),
+                  ),
+                  Center(
+                    child: Text('내용 4'),
+                  ),
+                  Center(
+                    child: Text('내용 5'),
+                  ),
+                  Center(
+                    child: Text('내용 6'),
+                  ),
+                  Center(
+                    child: Text('내용 7'),
+                  ),
+                  Center(
+                    child: Text('내용 8'),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+//배너 바로 아래 주가 지수 나온 부분
   Widget _addContainerWidget(String jm, String price, String increase) {
     return Container(
         margin: EdgeInsets.only(left: 10),
@@ -124,7 +206,7 @@ class HomePage extends BasePage<HomePageController> {
         child: Padding(
             padding: EdgeInsets.fromLTRB(16, 16, 16, 12),
             child: Column(
-                // mainAxisAlignment: MainAxisAlignment.start,
+              // mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
@@ -175,78 +257,92 @@ class HomePage extends BasePage<HomePageController> {
                 ])));
   }
 
-// Widget _addFirstTabBar(String jmimg, String jmname, String jmchart,
-//     String jmprice, String jmyield) {
-//   return Padding(
-//     padding: EdgeInsets.only(bottom: 10),
-//     child: Row(
-//       // mainAxisAlignment: MainAxisAlignment.spaceBetween, // 가로 방향으로 공간을 균등하게 분배
-//       // crossAxisAlignment: CrossAxisAlignment.center, // 세로 방향에서 중앙 정렬
-//
-//       children: [
-//         Image.asset(jmimg, width: 36, height: 36),
-//         Expanded(
-//             child: Padding(
-//               padding: EdgeInsets.only(left: 10),
-//               child: Text(
-//                 jmname,
-//                 style: TextStyle(
-//                   fontSize: 16,
-//                   fontWeight: FontWeight.w500,
-//                   color: Color(0xFF222222),
-//                 ),
-//               ),
-//             )),
-//         Image.asset(
-//           jmchart,
-//           width: 56,
-//           height: 36,
-//         ),
-//         Container(
-//             width: 100,
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.end,
-//               children: [
-//                 Text(
-//                   jmprice,
-//                   style: TextStyle(
-//                     color: jmchart.contains("bluechart")
-//                         ? Color(0xFF2F68DD)
-//                         : Color(0xFFDE3226),
-//                     fontSize: 14,
-//                     fontWeight: FontWeight.w500,
-//                   ),
-//                 ),
-//                 Row(
-//                     mainAxisAlignment: MainAxisAlignment.end,
-//                     crossAxisAlignment: CrossAxisAlignment.center,
-//                     children: [
-//                       Icon(
-//                         jmyield.contains("-")
-//                             ? Icons.arrow_drop_down
-//                             : Icons.arrow_drop_up,
-//                         size: 12.0,
-//                         color: jmyield.contains("-")
-//                             ? Color(0xFF2F68DD)
-//                             : Color(0xFFDE3226),
-//                       ),
-//                       Text(
-//                         jmyield,
-//                         style: TextStyle(
-//                           fontSize: 12,
-//                           fontWeight: FontWeight.w500,
-//                           color: jmyield.contains("-")
-//                               ? Color(0xFF2F68DD)
-//                               : Color(0xFFDE3226),
-//                         ),
-//                       )
-//                     ]),
-//               ],
-//             ))
-//       ],
-//     ),
-//   );
-// }
+  List<Widget> tabContents(List<Map<String, dynamic>> tabDataList) {
+    var result = <Widget>[];
+    for (var tabData in tabDataList) {
+      result.add(
+        _addFirstTabBar(
+          tabData['jmimg'],
+          tabData['jmname'],
+          tabData['jmchart'],
+          tabData['jmprice'],
+          tabData['jmyield'],
+        ),
+      );
+    }
+    return result;
+  }
 
+  Widget _addFirstTabBar(String jmimg, String jmname, String jmchart,
+      String jmprice, String jmyield) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(24, 12, 24, 12),
+      child: Row(
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween, // 가로 방향으로 공간을 균등하게 분배
+        // crossAxisAlignment: CrossAxisAlignment.center, // 세로 방향에서 중앙 정렬
 
+        children: [
+          Image.asset(jmimg, width: 36, height: 36),
+          Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(left: 10),
+                child: Text(
+                  jmname,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFF222222),
+                  ),
+                ),
+              )),
+          Image.asset(
+            jmchart,
+            width: 56,
+            height: 36,
+          ),
+          Container(
+              width: 100,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    jmprice,
+                    style: TextStyle(
+                      color: jmchart.contains("bluechart")
+                          ? Color(0xFF2F68DD)
+                          : Color(0xFFDE3226),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          jmyield.contains("-")
+                              ? Icons.arrow_drop_down
+                              : Icons.arrow_drop_up,
+                          size: 12.0,
+                          color: jmyield.contains("-")
+                              ? Color(0xFF2F68DD)
+                              : Color(0xFFDE3226),
+                        ),
+                        Text(
+                          jmyield,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: jmyield.contains("-")
+                                ? Color(0xFF2F68DD)
+                                : Color(0xFFDE3226),
+                          ),
+                        )
+                      ]),
+                ],
+              ))
+        ],
+      ),
+    );
+  }
 }
