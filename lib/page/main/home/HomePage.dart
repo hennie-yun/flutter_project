@@ -6,9 +6,14 @@ import 'package:get/get.dart';
 import '../../../base/BasePage.dart';
 import '../../../constants/SampleColor.dart';
 import 'HomePageController.dart';
+import 'edit/EditPage.dart';
 
 class HomePage extends BasePage<HomePageController> {
   HomePageController HPController = HomePageController();
+
+
+
+
 
   @override
   AppBar? setAppBar() {
@@ -32,6 +37,9 @@ class HomePage extends BasePage<HomePageController> {
 
   @override
   Widget setBuild() {
+    return Obx(() {
+      List<Map<String, dynamic>> interestTabs = HPController.getInterestTabs();
+
     return Column(children: [
       Container(
         color: SampleColor.bgUiCard,
@@ -61,40 +69,49 @@ class HomePage extends BasePage<HomePageController> {
                     children: [
                       SizedBox(
                           child: Row(children: [
-                            RichText(
-                                text: const TextSpan(
-                                  children: [
-                                    TextSpan(
-                                        text: 'MY',
-                                        style: TextStyle(
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.w700,
-                                            color: Color(0xFF00B0AD))),
-                                    TextSpan(
-                                      text: '관심',
-                                      style: TextStyle(
-                                        fontSize: 22,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ],
-                                )),
-                            Image.asset('assets/images/icon_arrow_R.png',
-                                width: 24, height: 24),
-                          ])),
-                      Container(
-                          margin: EdgeInsets.only(right: 24),
-                          child: Row(children: [
-                            Image.asset('assets/images/icon_pencil.png',
-                                width: 18, height: 18),
-                            const Text('편집',
+                        RichText(
+                            text: const TextSpan(
+                          children: [
+                            TextSpan(
+                                text: 'MY',
                                 style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xFF9E9E9E))),
-                          ]))
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xFF00B0AD))),
+                            TextSpan(
+                              text: '관심',
+                              style: TextStyle(
+                                fontSize: 22,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        )),
+                        Image.asset('assets/images/icon_arrow_R.png',
+                            width: 24, height: 24),
+                      ])),
+                      GestureDetector(
+                          onTap: () async {
+                            final result = await Get.to<Map<String, dynamic>>(EditPage());
+                            if (result != null && result['yes'] is List<Map<String, dynamic>>) {
+                              interestTabs.assignAll(result['yes']); // 데이터 업데이트
+                              HPController.updateUI();
+                            }
+                          },
+
+                          child: Container(
+                              margin: EdgeInsets.only(right: 24),
+                              child: Row(children: [
+                                Image.asset('assets/images/icon_pencil.png',
+                                    width: 18, height: 18),
+                                const Text('편집',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xFF9E9E9E))),
+                              ])))
                     ]) //Row 두개를 다시 Row 로 정렬해 줄 큰 Row 와 children
-            ),
+                ),
           ],
         ),
       ),
@@ -103,7 +120,9 @@ class HomePage extends BasePage<HomePageController> {
         child: _tabView(),
       ),
     ]);
-  }
+  });
+        }
+
 
   Widget _tabView() {
     List<Map<String, dynamic>> interestTabs = HPController.getInterestTabs();
@@ -144,8 +163,8 @@ class HomePage extends BasePage<HomePageController> {
 
               /// 라벨에 주는 패딩
               labelPadding: const EdgeInsets.symmetric(horizontal: 10
-                // vertical: 10,
-              ),
+                  // vertical: 10,
+                  ),
 
               /// 인디캐이터의 패딩
               indicatorPadding: const EdgeInsets.all(8),
@@ -195,6 +214,7 @@ class HomePage extends BasePage<HomePageController> {
     );
   }
 
+
 //배너 바로 아래 주가 지수 나온 부분
   Widget _addContainerWidget(String jm, String price, String increase) {
     return Container(
@@ -206,7 +226,7 @@ class HomePage extends BasePage<HomePageController> {
         child: Padding(
             padding: EdgeInsets.fromLTRB(16, 16, 16, 12),
             child: Column(
-              // mainAxisAlignment: MainAxisAlignment.start,
+                // mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
@@ -285,16 +305,16 @@ class HomePage extends BasePage<HomePageController> {
           Image.asset(jmimg, width: 36, height: 36),
           Expanded(
               child: Padding(
-                padding: EdgeInsets.only(left: 10),
-                child: Text(
-                  jmname,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF222222),
-                  ),
-                ),
-              )),
+            padding: EdgeInsets.only(left: 10),
+            child: Text(
+              jmname,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF222222),
+              ),
+            ),
+          )),
           Image.asset(
             jmchart,
             width: 56,
