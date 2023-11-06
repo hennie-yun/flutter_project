@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 class HomePageController extends GetxController {
 
+
  RxList<Map<String, dynamic>> interestTabs = <Map<String, dynamic>>[
   {
    "jmimg": "assets/images/jm_1.png",

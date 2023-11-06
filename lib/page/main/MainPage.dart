@@ -6,6 +6,7 @@ import 'package:get/get_core/src/get_main.dart';
 import '../../manager/GlobalController.dart';
 import 'MainPageController.dart';
 import 'home/HomePage.dart';
+import 'investment/InvestmentPage.dart';
 
 class MainPage extends StatelessWidget {
 
@@ -65,7 +66,7 @@ Widget setBottom() {
             _globalCtrl.setCurrWidget(HomePage());
             break;
           case 1:
-            _globalCtrl.setCurrWidget(HomePage());
+            _globalCtrl.setCurrWidget(InvestmentPage());
             break;
           case 2:
             _globalCtrl.setCurrWidget(HomePage());
